@@ -1,0 +1,1 @@
+savedcmd_/home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/cpu/Module.symvers :=  scripts/mod/modpost -m -a      -o /home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/cpu/Module.symvers -T /home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/cpu/modules.order -i Module.symvers -e 
