@@ -1,1 +1,0 @@
-savedcmd_/home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/ram/ram_so1_1s2024.mod := printf '%s\n'   ram_so1_1s2024.o | awk '!x[$$0]++ { print("/home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/ram/"$$0) }' > /home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/ram/ram_so1_1s2024.mod

@@ -24,7 +24,7 @@ type Proceso struct {
 	Usuario  int       `json:"usuario"`
 	Estado   int       `json:"estado"`
 	RAM      int       `json:"ram"`
-	Children []Proceso `json:"children,omitempty"`
+	Children []Proceso `json:"child,omitempty"`
 }
 
 type Historial struct {

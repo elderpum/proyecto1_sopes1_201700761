@@ -1,1 +1,0 @@
-savedcmd_/home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/ram/Module.symvers :=  scripts/mod/modpost -m -a      -o /home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/ram/Module.symvers -T /home/epum/Escritorio/Sopes1/proyecto1_sopes1_201700761/module/ram/modules.order -i Module.symvers -e 

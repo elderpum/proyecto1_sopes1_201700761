@@ -13,5 +13,26 @@ services:
     volumes:
       - mysqlvol:/var/lib/mysql
 
+  backend:
+    image: epum/backend-so1-proyecto1:latest
+    pid: host
+    restart: always
+    volumes:
+    - type: bind
+      source: /proc
+      target: /proc
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    image: epum/frontend-so1-proyecto1:latest
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
 volumes:
   mysqlvol:
