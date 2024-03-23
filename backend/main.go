@@ -221,7 +221,7 @@ func correrCada5Segundos() {
 
 func obtenerValoresDB() ([]byte, error) {
 	// Cadena de conexión a la base de datos
-	connectionString := "user:pass@tcp(db:3306)/memories"
+	connectionString := "user:pass@tcp(db:3306)/Modules"
 	// Reemplaza usuario, contraseña, puerto y nombre_de_la_base_de_datos con los valores correctos
 
 	// Abre la conexión a la base de datos
@@ -467,5 +467,5 @@ func KillProcess(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
-	
+
 }
