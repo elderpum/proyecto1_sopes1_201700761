@@ -17,33 +17,33 @@ import (
 	"github.com/rs/cors"
 )
 
-// Creamos los structs necesarios para el manejo de la informaciòn
-type Proceso struct {
-	PID      int       `json:"pid"`
-	Nombre   string    `json:"nombre"`
-	Usuario  int       `json:"usuario"`
-	Estado   int       `json:"estado"`
-	RAM      int       `json:"ram"`
-	Children []Proceso `json:"child,omitempty"`
+type Process struct {
+	PID      int        `json:"pid"`
+	Name     string     `json:"name"`
+	User     int        `json:"user,omitempty"`
+	State    int        `json:"state"`
+	RAM      int        `json:"ram"`
+	Children []*Process `json:"child,omitempty"`
 }
 
-type Historial struct {
-	Fecha      string `json:"fecha"`
-	MemoriaRam int    `json:"memoriaRam"`
+type MemHistorico struct {
+	FechaHora  string `json:"fechaHora"`
+	MemoriaRAM int    `json:"memoriaRAM"`
 	CPU        int    `json:"cpu"`
 }
 
 type Response struct {
-	Mensaje string `json:"mensaje"`
+	Message string `json:"message"`
 	PID     int    `json:"pid,omitempty"`
 }
 
 var process *exec.Cmd
 
-type ArbolProcesos struct {
-	CPUTotal      int        `json:"cpuTotal"`
-	CPUPorcentaje int        `json:"cpuPorcentaje"`
-	Procesos      []*Proceso `json:"procesos"`
+// Estructura para representar el conjunto de procesos
+type ProcessTree struct {
+	CPUTotal      int        `json:"cpu_total"`
+	CPUPorcentaje int        `json:"cpu_porcentaje"`
+	Processes     []*Process `json:"processes"`
 	Running       int        `json:"running"`
 	Sleeping      int        `json:"sleeping"`
 	Zombie        int        `json:"zombie"`
@@ -92,8 +92,8 @@ func inicializarDB() {
 	// Ejecuta una sentencia SQL para crear la tabla Historial
 	_, err = db.Exec(`
         CREATE TABLE IF NOT EXISTS Historial (
-            fecha TIMESTAMP,
-            memoriaRam INT,
+            fechaHora TIMESTAMP,
+            memoria_ram INT,
             cpu INT
         );
     `)
@@ -145,12 +145,12 @@ func getProcesos(w http.ResponseWriter, r *http.Request) {
 	// Convertir los datos a string
 	content := string(data)
 	// Decodificar los datos JSON en una estructura ProcessTree
-	var ArbolProcesos ArbolProcesos
-	if err := json.Unmarshal([]byte(content), &ArbolProcesos); err != nil {
+	var processTree ProcessTree
+	if err := json.Unmarshal([]byte(content), &processTree); err != nil {
 		fmt.Println("Error al decodificar JSON:", err)
 		return
 	}
-	procesos := ArbolProcesos.Procesos
+	procesos := processTree.Processes
 	// Establecer el encabezado Content-Type
 	w.Header().Set("Content-Type", "application/json")
 
@@ -174,7 +174,7 @@ func historicoMemory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Deserializar jsonData en una slice de Historial
-	var historico []Historial
+	var historico []MemHistorico
 	if err := json.Unmarshal(jsonData, &historico); err != nil {
 		http.Error(w, "Error al deserializar los datos JSON", http.StatusInternalServerError)
 		log.Fatal(err)
@@ -232,19 +232,19 @@ func obtenerValoresDB() ([]byte, error) {
 	defer db.Close()
 
 	// Prepara la consulta SQL para seleccionar todos los registros de la tabla
-	rows, err := db.Query("SELECT fecha, memoriaRam, cpu FROM Historial")
+	rows, err := db.Query("SELECT fechaHora, memoria_ram, cpu FROM Historial")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	// Crea una slice de Historial para almacenar los resultados
-	var resultados []Historial
+	var resultados []MemHistorico
 
 	// Itera sobre los resultados y almacena cada registro en la slice
 	for rows.Next() {
-		var m Historial
-		if err := rows.Scan(&m.Fecha, &m.MemoriaRam, &m.CPU); err != nil {
+		var m MemHistorico
+		if err := rows.Scan(&m.FechaHora, &m.MemoriaRAM, &m.CPU); err != nil {
 			return nil, err
 		}
 		resultados = append(resultados, m)
@@ -377,13 +377,14 @@ func StartProcess(w http.ResponseWriter, r *http.Request) {
 	process = cmd
 
 	response := Response{
-		Mensaje: "Proceso iniciado",
+		Message: "Proceso iniciado",
 		PID:     process.Process.Pid,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
+
 func StopProcess(w http.ResponseWriter, r *http.Request) {
 	pidStr := r.URL.Query().Get("pid")
 	if pidStr == "" {
@@ -405,12 +406,13 @@ func StopProcess(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := Response{
-		Mensaje: fmt.Sprintf("Proceso con PID %d detenido", pid),
+		Message: fmt.Sprintf("Proceso con PID %d detenido", pid),
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
+
 func ResumeProcess(w http.ResponseWriter, r *http.Request) {
 	pidStr := r.URL.Query().Get("pid")
 	if pidStr == "" {
@@ -432,12 +434,13 @@ func ResumeProcess(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := Response{
-		Mensaje: fmt.Sprintf("Proceso con PID %d reanudado", pid),
+		Message: fmt.Sprintf("Proceso con PID %d reanudado", pid),
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
+
 func KillProcess(w http.ResponseWriter, r *http.Request) {
 	pidStr := r.URL.Query().Get("pid")
 	if pidStr == "" {
@@ -459,9 +462,9 @@ func KillProcess(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := Response{
-		Mensaje: fmt.Sprintf("Proceso con PID %d ha terminado", pid),
+		Message: fmt.Sprintf("Proceso con PID %d ha terminado", pid),
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	
 }
