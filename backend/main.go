@@ -351,7 +351,7 @@ func insertarDatosEnDB(fechaHora time.Time, memoriaRAM int, cpu int) error {
 	defer db.Close()
 
 	// Prepara la sentencia SQL para insertar datos en la tabla
-	stmt, err := db.Prepare("INSERT INTO Historial(fecha, memoriaRam, cpu) VALUES(?,?,?)")
+	stmt, err := db.Prepare("INSERT INTO Historial(fechaHora, memoria_ram, cpu) VALUES(?,?,?)")
 	if err != nil {
 		return err
 	}
