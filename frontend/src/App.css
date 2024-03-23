@@ -1,6 +1,19 @@
+html {
+  min-height: 720px;
+  min-width: 320px;
+  background-repeat: no-repeat;
+}
+
+html,body {
+  display: center;
+  justify-content: center;
+  align-items: center;
+  background: url("../src/assets/logo.svg");
+  background-size: cover;
+}
+
 #root {
   max-width: 1280px;
-  margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
@@ -11,9 +24,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }

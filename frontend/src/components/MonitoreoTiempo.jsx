@@ -44,7 +44,7 @@ const MonitoreoTiempo = () => {
           {
             label: "RAM",
             data: ramData,
-            borderColor: "#FF6384",
+            borderColor: "#F7770F",
             borderWidth: 1,
             fill: false,
           },
@@ -82,7 +82,7 @@ const MonitoreoTiempo = () => {
           {
             label: "CPU",
             data: cpuData,
-            borderColor: "#36A2EB",
+            borderColor: "#0ff795",
             borderWidth: 1,
             fill: false,
           },

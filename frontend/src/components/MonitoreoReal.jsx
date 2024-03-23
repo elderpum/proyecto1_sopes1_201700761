@@ -39,8 +39,8 @@ const MonitoreoReal = () => {
             datasets: [
               {
                 data: [data.ram, 100 - data.ram],
-                backgroundColor: ["#FF6384", "#36A2EB"],
-                hoverBackgroundColor: ["#FF6384", "#36A2EB"],
+                backgroundColor: ["#F7770F", "#F7CACA"],
+                hoverBackgroundColor: ["#F7770F", "#F7CACA"],
               },
             ],
           },
@@ -67,8 +67,8 @@ const MonitoreoReal = () => {
             datasets: [
               {
                 data: [data.cpu, 100 - data.cpu],
-                backgroundColor: ["#FFCE56", "#FF8042"],
-                hoverBackgroundColor: ["#FFCE56", "#FF8042"],
+                backgroundColor: ["#0ff795", "#FBAE3C"],
+                hoverBackgroundColor: ["#0ff795", "#FBAE3C"],
               },
             ],
           },

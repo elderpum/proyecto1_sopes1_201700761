@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './App.css';
 import MonitoreoReal from './components/MonitoreoReal';
 import MonitoreoTiempo from './components/MonitoreoTiempo';
 import ArbolProcesos from './components/ArbolProcesos';
